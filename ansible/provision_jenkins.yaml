@@ -1,0 +1,26 @@
+---
+- name: Configure Jenkins Server
+  hosts: jenkins
+  tasks:
+
+    - name: Install Java Requirements
+      yum:
+        name: java-11
+      become: yes
+    
+    - name: Jenkins dependencies
+      shell: |
+        wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+      become: yes
+
+    - name: Install Jenkins
+      yum:
+        name: jenkins
+      become: yes
+
+    - name: Run Jenkins
+      shell: |
+        systemctl enable jenkins
+        systemctl start jenkins
+      become: yes
